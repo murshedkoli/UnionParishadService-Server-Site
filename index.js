@@ -71,6 +71,26 @@ client.connect(err => {
   })
 
 
+  app.get('/singleTradeLicense/:id', (req, res) => {
+    const lincesKey = req.params.id;
+    tradeLicenseCollection.find({ tradeLicenseNo: lincesKey })
+      .toArray((err, document) => {
+        res.send(document)
+      })
+  })
+
+
+
+  app.get('/licenseWithNid/:id', (req, res) => {
+    const nid = req.params.id;
+    tradeLicenseCollection.find({ nid: nid })
+      .toArray((err, document) => {
+        res.send(document)
+      })
+  })
+
+
+
   app.post('/addAdmin', (req, res) => {
     const admin = req.body;
     const name = admin.name;
@@ -98,6 +118,7 @@ client.connect(err => {
     adminCollection.find({}).toArray()
       .then(result => {
         res.send(result)
+
       })
   })
 
@@ -105,7 +126,6 @@ client.connect(err => {
 
   app.get('/citizen', async (req, res) => {
     let cursor = citizenCollection.find({});
-
     const nameornid = req.query.nameornid;
     if (nameornid) {
       cursor = citizenCollection.find({ $or: [{ nameBn: { $regex: nameornid } }, { nid: { $regex: nameornid } }, { phone: { $regex: nameornid } }] });
