@@ -163,6 +163,17 @@ client.connect(err => {
   })
 
 
+
+  app.get('/admin/:id', (req, res) => {
+    const phone = req.params.id;
+    const data = req.body;
+    adminCollection.find({ phone: phone })
+      .toArray((err, document) => {
+        res.send(document)
+      })
+  })
+
+
   app.patch('/paidTax/:nid', (req, res) => {
     const nid = req.params.nid;
     const { due, totalTax } = req.body;
