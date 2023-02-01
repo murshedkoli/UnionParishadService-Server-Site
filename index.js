@@ -166,13 +166,25 @@ client.connect(err => {
   app.patch('/paidTax/:nid', (req, res) => {
     const nid = req.params.nid;
     const { due, totalTax } = req.body;
-    console.log(req.body)
     citizenCollection.updateOne({ nid: nid },
       { $set: { current: due, paidTax: totalTax } }
     )
       .then(result => {
         res.send(result)
       })
+  })
+
+  app.post('/login', async (req, res) => {
+    if (req.body.phone && req.body.password) {
+      let user = await adminCollection.findOne(req.body);
+      if (user) {
+        res.send(user)
+      } else {
+        res.send({ result: 'No User Found' })
+      }
+    } else {
+      res.send({ result: 'No User Found' })
+    }
   })
 
 
